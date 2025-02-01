@@ -1,0 +1,70 @@
+/* General Styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #565656;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+/* Login Container */
+.login-container {
+    background: rgb(183, 183, 183);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    text-align: center;
+}
+
+/* Input Fields */
+.input-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 05px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Button */
+.btn {
+    width: 100%;
+    padding: 10px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.btn:hover {
+    background-color: #218838;
+}
+
+/* Register Link */
+.register {
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.register a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.register a:hover {
+    text-decoration: underline;
+}

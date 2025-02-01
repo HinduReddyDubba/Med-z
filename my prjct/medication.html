@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medications Page</title>
+    <style>
+        /* Same styles as before */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: white;
+            padding: 20px;
+            margin: 0;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #f1f1f1;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .header h2 {
+            margin: 0 auto;
+            text-align: center;
+            flex-grow: 1;
+            color: #007bff;
+        }
+        .icon {
+            font-size: 20px;
+            cursor: pointer;
+            color: #007bff;
+            margin: 0 10px;
+        }
+        .icon:hover {
+            color: #0056b3;
+        }
+        .left-icons, .right-icons {
+            display: flex;
+            align-items: center;
+        }
+        .bold-arrow {
+            font-weight: bold;
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        .medication-list {
+            margin-top: 20px;
+        }
+        .medication-item {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        /* Form Styling */
+        form {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 10px;
+        }
+        input {
+            width: 95%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            margin-top: 15px;
+            padding: 08px;
+            width: 100%;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .reminder-mark {
+            position: absolute;
+            bottom: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 10px;
+            height: 10px;
+            background-color: red;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="left-icons">
+            <a href="pillreminder.html"><span class="icon bold-arrow">&#8592;</span></a> <!-- Back Arrow with Link -->
+        </div>
+        <h2>Medications</h2>
+    </div>
+
+    <!-- Medication Addition Form -->
+    <form id="addMedicationForm">
+        <label for="medication-name">Medication Name:</label>
+        <input type="text" id="medication-name" required>
+
+        <label for="medication-dosage">Dosage(mg):</label>
+        <input type="text" id="medication-dosage" required>
+
+        <label for="medication-frequency">Times per Day:</label>
+        <input type="number" id="medication-frequency" min="1" max="24" required>
+
+        <label for="start-date">Start Date:</label>
+        <input type="date" id="start-date" required>
+
+        <label for="medication-duration">Duration (Days):</label>
+        <input type="number" id="medication-duration" min="1" required>
+
+        <button type="submit">Add Medication</button>
+    </form>
+
+    <!-- Medication List Section -->
+    <div class="medication-list" id="medicationList">
+        <!-- Dynamically filled with saved medication data -->
+    </div>
+
+    <script>
+        // Function to display saved medication data
+        function displayMedications() {
+            const medications = JSON.parse(localStorage.getItem('medications')) || [];
+            const medicationListContainer = document.getElementById('medicationList');
+            medicationListContainer.innerHTML = '';
+
+            if (medications.length === 0) {
+                medicationListContainer.innerHTML = "<p>No medications added yet.</p>";
+                return;
+            }
+
+            medications.forEach((medication, index) => {
+                const medicationItem = document.createElement('div');
+                medicationItem.classList.add('medication-item');
+                medicationItem.innerHTML = `
+                    <strong>Name:</strong> ${medication.name} <br>
+                    <strong>Dose:</strong> ${medication.dose} <br>
+                    <strong>Times per Day:</strong> ${medication.frequency} <br>
+                    <strong>Start Date:</strong> ${medication.startDate} <br>
+                    <strong>Duration:</strong> ${medication.duration} days <br>
+                    <button onclick="deleteMedication(${index})" style="margin-top:10px; background-color:red;">Delete</button>
+                `;
+                medicationListContainer.appendChild(medicationItem);
+            });
+        }
+
+        // Function to add new medication
+        document.getElementById("addMedicationForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const name = document.getElementById("medication-name").value.trim();
+            const dose = document.getElementById("medication-dosage").value.trim();
+            const frequency = document.getElementById("medication-frequency").value.trim();
+            const startDate = document.getElementById("start-date").value.trim();
+            const duration = document.getElementById("medication-duration").value.trim();
+
+            if (!name || !dose || !frequency || !startDate || !duration) {
+                alert("Please fill in all medication details.");
+                return;
+            }
+
+            const medications = JSON.parse(localStorage.getItem('medications')) || [];
+            medications.push({ name, dose, frequency, startDate, duration });
+            localStorage.setItem('medications', JSON.stringify(medications));
+
+            // Mark medication days on the calendar
+            markMedicationDays(startDate, duration);
+
+            alert("Medication added successfully!");
+            displayMedications();
+            document.getElementById("addMedicationForm").reset();
+        });
+
+        // Function to delete a medication
+        function deleteMedication(index) {
+            const medications = JSON.parse(localStorage.getItem('medications')) || [];
+            medications.splice(index, 1);
+            localStorage.setItem('medications', JSON.stringify(medications));
+            displayMedications();
+        }
+
+        // Function to mark medication days on the calendar
+        function markMedicationDays(startDate, duration) {
+            const reminders = JSON.parse(localStorage.getItem('reminders')) || [];
+
+            // Calculate the medication days
+            let currentDate = new Date(startDate);
+            for (let i = 0; i < duration; i++) {
+                reminders.push({ date: currentDate.toISOString().split('T')[0] });
+                currentDate.setDate(currentDate.getDate() + 1);
+            }
+
+            localStorage.setItem('reminders', JSON.stringify(reminders));
+        }
+
+        // Call function to display medications on page load
+        window.onload = displayMedications;
+    </script>
+
+</body>
+</html>

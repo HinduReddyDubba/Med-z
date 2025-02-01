@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Conditions Form</title>
+    <link rel="stylesheet" href="homestyle.css">
+    <style>
+        .yes-no-options {
+            display: flex;
+            gap: 10px;
+        }
+
+        /* Add spacing between each health condition section */
+        .input-group div {
+            margin-bottom: 10px;
+        }
+
+        /* Ensure dosage fields and consult messages also have spacing */
+        .medications-field, .dosage-field, .consult-message {
+            margin-bottom: 10px;
+        }
+    </style>
+    <script>
+        function toggleFields() {
+            const conditions = document.querySelectorAll('input[name="condition"]:checked');
+            const allFields = document.querySelectorAll('.medications-field, .dosage-field, .consult-message, .eyesight-options');
+
+            // Hide all condition-related fields
+            allFields.forEach(field => field.style.display = 'none');
+
+            // Show selected condition fields
+            conditions.forEach(condition => {
+                const conditionValue = condition.value;
+                const medicationField = document.getElementById('medications-field-' + conditionValue);
+                const eyesightField = document.getElementById('eyesight-options');
+
+                if (medicationField) {
+                    medicationField.style.display = 'block';
+                }
+                if (conditionValue === 'eyesight' && eyesightField) {
+                    eyesightField.style.display = 'block';
+                }
+            });
+        }
+
+        function toggleDosageField(condition) {
+            const takingMedications = document.querySelector('input[name="taking-medications-' + condition + '"]:checked');
+            const dosageField = document.getElementById('dosage-field-' + condition);
+            const consultMessage = document.getElementById('consult-message-' + condition);
+
+            // Hide dosage field and consult message initially
+            dosageField.style.display = 'none';
+            consultMessage.style.display = 'none';
+
+            // Show dosage field or consult message based on selection
+            if (takingMedications && takingMedications.value === 'yes') {
+                dosageField.style.display = 'block';
+            } else if (takingMedications && takingMedications.value === 'no') {
+                consultMessage.style.display = 'block';
+            }
+        }
+
+        function redirectToFirstPage(event) {
+            event.preventDefault(); // Prevent default form submission
+            window.location.href = 'firstpage.html'; // Redirect to firstpage.html
+        }
+    </script>
+</head>
+<body>
+    <div class="health-condition-form">
+        <h2>Select Your Health Conditions</h2>
+        
+        <form id="health-form" onsubmit="redirectToFirstPage(event)">
+            <div class="input-group">
+                <label>Select Conditions:</label>
+
+                <!-- Reusable Template for BP, Diabetes, Thyroid, Migraine, Sinus -->
+                <script>
+                    const conditions = [
+                        { id: "bp", label: "BP (Blood Pressure)" },
+                        { id: "diabetes", label: "Diabetes" },
+                        { id: "thyroid", label: "Thyroid" },
+                        { id: "migraine", label: "Migraine" },
+                        { id: "sinus", label: "Sinus" }
+                    ];
+                    document.write(conditions.map(({ id, label }) => `
+                        <div>
+                            <label for="${id}">${label}</label>
+                            <input type="checkbox" id="${id}" name="condition" value="${id}" onclick="toggleFields()"> 
+                            <div id="medications-field-${id}" class="medications-field" style="display:none; margin-left: 20px;">
+                                <label>Are you taking medications for ${label}?</label>
+                                <div class="yes-no-options">
+                                    <input type="radio" name="taking-medications-${id}" value="yes" onclick="toggleDosageField('${id}')"> Yes
+                                    <input type="radio" name="taking-medications-${id}" value="no" onclick="toggleDosageField('${id}')"> No
+                                </div>
+                            </div>
+                            <div id="dosage-field-${id}" class="dosage-field" style="display:none; margin-left: 20px;">
+                                <label>Dosage of Medication:</label>
+                                <select name="${id}-dosage">
+                                    <option value="select">Select</option>
+                                    <option value="low">Low</option>
+                                    <option value="medium">Medium</option>
+                                    <option value="high">High</option>
+                                </select>
+                            </div>
+                            <div id="consult-message-${id}" class="consult-message" style="display:none; margin-left: 20px;">
+                                <p>If you are not taking medications, please consult your doctor.</p>
+                            </div>
+                        </div>
+                    `).join(""));
+                </script>
+
+                <!-- Eyesight (Uses a Dropdown Instead of Medication Fields) -->
+                <div>
+                    <label for="eyesight">Eyesight Condition</label>
+                    <input type="checkbox" id="eyesight" name="condition" value="eyesight" onclick="toggleFields()"> 
+                    <div id="eyesight-options" class="eyesight-options" style="display:none; margin-left: 20px;">
+                        <label>Select Your Eyesight Condition:</label>
+                        <select name="eyesight-condition">
+                            <option value="select">Select</option>
+                            <option value="myopia">Myopia (Nearsightedness)</option>
+                            <option value="hyperopia">Hyperopia (Farsightedness)</option>
+                            <option value="astigmatism">Astigmatism</option>
+                            <option value="presbyopia">Presbyopia (Age-related vision loss)</option>
+                            <option value="normal">Normal Vision</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Frequency Field - Always Visible -->
+            <div class="input-group">
+                <label for="frequency">How often do you fall ill?</label>
+                <select id="frequency" name="frequency">
+                    <option value="0">Select</option>
+                    <option value="1">1 time per month</option>
+                    <option value="2">2 times per month</option>
+                    <option value="3">3 times per month</option>
+                    <option value="4">4 times per month</option>
+                </select>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="input-group">
+                <button type="submit">Submit</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

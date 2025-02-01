@@ -1,0 +1,101 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: #f2f2f2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Main Container */
+.home-container {
+    background: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 600px;
+}
+
+h2 {
+    text-align: center;
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+/* Form Elements */
+.input-group {
+    margin-bottom: 15px;
+}
+
+label {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 5px;
+    display: inline-block;
+}
+
+input[type="text"],
+input[type="date"],
+input[type="number"],
+select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+input[type="radio"] {
+    margin-right: 10px;
+}
+
+.radio-group {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+select {
+    background-color: #fff;
+}
+
+/* Buttons */
+button[type="submit"] {
+    width: 100%;
+    padding: 12px;
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 600px) {
+    .home-container {
+        padding: 20px;
+    }
+
+    h2 {
+        font-size: 20px;
+    }
+
+    button[type="submit"] {
+        font-size: 14px;
+    }
+}

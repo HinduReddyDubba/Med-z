@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="auth-container">
+        <!-- Login Section -->
+        <div class="login-container" id="login-form">
+            <h1>MED-Z</h1>
+            <h2>Login</h2>
+            <form id="login-form-action" method="POST">
+                <div class="input-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit" class="btn">Login</button>
+                <p class="register">Don't have an account? <a href="#" id="show-signup">Sign Up</a></p>
+            </form>
+        </div>
+
+        <!-- Sign-Up Section -->
+        <div class="signup-container" id="signup-form" style="display: none;">
+            <h2>Sign Up</h2>
+            <form action="signup.php" method="POST">
+                <div class="input-group">
+                    <label for="new-email">Email</label>
+                    <input type="email" id="new-email" name="email" required>
+                </div>
+                <div class="input-group">
+                    <label for="new-password">Password</label>
+                    <input type="password" id="new-password" name="password" required>
+                </div>
+                <button type="submit" class="btn">Sign Up</button>
+                <p class="register">Already have an account? <a href="#" id="show-login">Login</a></p>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Switch between Login and Sign Up forms
+        document.getElementById('show-signup').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('login-form').style.display = 'none';
+            document.getElementById('signup-form').style.display = 'block';
+        });
+
+        document.getElementById('show-login').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('signup-form').style.display = 'none';
+            document.getElementById('login-form').style.display = 'block';
+        });
+
+        // Save login details to localStorage and redirect after login
+        document.getElementById('login-form-action').addEventListener('submit', function(e) {
+            e.preventDefault();  // Prevent form submission
+
+            // Get the entered username and password
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            // Save the login details in localStorage
+            localStorage.setItem('email', email);
+            localStorage.setItem('password', password);
+
+            alert('Login details saved successfully!');
+
+            // Redirect to home page
+            window.location.href = "home.html";  // Replace with actual home page URL
+        });
+    </script>
+</body>
+</html>
